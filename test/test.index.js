@@ -8,6 +8,7 @@
 'use strict';
 
 var random = require('../src/index.js');
+var object = require('blear.utils.object');
 
 describe('index.js', function () {
     it('.number', function (done) {
