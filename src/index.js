@@ -28,21 +28,6 @@ var STRING_LENGTH = exports.STRING_LENGTH = 6;
  * // => 1 or 2 or 3
  */
 exports.number = function (min, max) {
-    var temp;
-
-    min = number.parseInt(min, 0);
-    max = number.parseInt(max, 0);
-
-    if (min === max) {
-        return min;
-    }
-
-    if (min > max) {
-        temp = min;
-        min = max;
-        max = temp;
-    }
-
     return Math.floor(Math.random() * (max - min + 1) + min);
 };
 

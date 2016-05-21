@@ -8,30 +8,18 @@
 'use strict';
 
 var random = require('../src/index.js');
-var object = require('blear.utils.object');
 
 describe('index.js', function () {
     it('.number', function (done) {
         var min1 = 0;
         var max1 = 5;
-        var map = {};
         var i = 10000;
 
         while (i--) {
             var rn = random.number(max1, min1);
-            map[rn] = map[rn] || {times: 0};
-            map[rn].times++;
+            expect(rn).toBeGreaterThan(0);
+            expect(rn).toBeLessThan(6);
         }
-
-        var keys = object.keys(map);
-
-        expect(keys.length).toEqual(6);
-        expect(map[0].times).toBeGreaterThan(1);
-        expect(map[1].times).toBeGreaterThan(1);
-        expect(map[2].times).toBeGreaterThan(1);
-        expect(map[3].times).toBeGreaterThan(1);
-        expect(map[4].times).toBeGreaterThan(1);
-        expect(map[5].times).toBeGreaterThan(1);
 
         expect(random.number(0,0)).toEqual(0);
 
