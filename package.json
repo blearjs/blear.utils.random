@@ -1,6 +1,6 @@
 {
   "name": "blear.utils.random",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "random utils",
   "scripts": {
     "live": "browser-sync start --config bs-config.js",
