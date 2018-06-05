@@ -21,7 +21,7 @@ describe('index.js', function () {
             expect(rn).toBeLessThan(6);
         }
 
-        expect(random.number(0,0)).toEqual(0);
+        expect(random.number(0, 0)).toEqual(0);
 
         done();
     });
@@ -63,48 +63,43 @@ describe('index.js', function () {
     });
 
     it('.guid:default', function () {
-        var t = 10000;
-        var map = {};
-        var findDupliate = false;
+        var length = 10000;
+        var startGuid = null;
+        var endGuid = null;
 
-        while (t--) {
-            var r = random.guid();
-            map[r] = map[r] || 0;
-            map[r]++;
+        while (length--) {
+            var guid = random.guid();
+            startGuid = startGuid || guid;
 
-            if (map[r] > 1) {
-                findDupliate = true;
-                break;
+            if (guid === endGuid) {
+                throw new Error('guid 重复' + guid);
             }
+
+            endGuid = guid;
         }
 
-        expect(findDupliate).toBe(false);
+        console.log('startGuid', startGuid);
+        console.log('endGuid  ', endGuid);
     });
 
     it('.guid:timeStamp', function () {
-        var t = 10000;
-        var map = {};
-        var findDupliate = false;
-        var lastR = '';
+        var length = 10000;
+        var startGuid = null;
+        var endGuid = null;
 
-        while (t--) {
-            var r = random.guid(true);
-            map[r] = map[r] || 0;
-            map[r]++;
+        while (length--) {
+            var guid = random.guid(true);
+            startGuid = startGuid || guid;
 
-            if (map[r] > 1) {
-                findDupliate = true;
-                lastR = r;
-                break;
+            if (guid === endGuid) {
+                throw new Error('guid 重复' + guid);
             }
+
+            endGuid = guid;
         }
 
-        var timeStamp = lastR.slice(0, 13);
-        var date = new Date(timeStamp * 1);
-
-        expect(findDupliate).toBe(false);
-        expect(date.getTime()).not.toBe(NaN);
-        expect(date.getTime()).toBeLessThan(new Date().getTime());
+        console.log('startGuid', startGuid);
+        console.log('endGuid  ', endGuid);
     });
 
     it('.guid:maxLength', function () {

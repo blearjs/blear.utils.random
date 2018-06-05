@@ -11,8 +11,8 @@ var dictionaryMap = {
     A: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
     0: '0123456789'
 };
-var lastGuidTime = 0;
-var guidIndex = 0;
+var lastTimestamp = 0;
+var safeNo = 0;
 
 var STRING_LENGTH = exports.STRING_LENGTH = 6;
 
@@ -114,7 +114,7 @@ var padStartWithZero = function (str, maxLength) {
 /**
  * 最短 16 位长度的随机不重复字符串
  * @param [timeStamp=false] 是否时间戳形式
- * @param [maxLength=16] 最大长度
+ * @param [maxLength=21] 最大长度，不能小于 21
  * @returns {String}
  */
 exports.guid = function (timeStamp, maxLength) {
@@ -124,18 +124,22 @@ exports.guid = function (timeStamp, maxLength) {
     var now = d.getTime();
     var args = access.args(arguments);
     var suffix = '';
-    var minLength = 16;
+    // 安全后缀长度，按 1 毫秒运算 900 万次 JS 代码来进行估算
+    // 那么，安全后缀的长度为 4
+    // 时间模式长度为 14，日期模式长度为 17，
+    // 取最长 17 + 4 = 21
+    var minLength = 21;
 
     switch (args.length) {
         case 0:
             timeStamp = false;
-            maxLength = minLength;
+            maxLength = 0;
             break;
 
         case 1:
-            // guid(isTimeStamp);
+            // guid(timeStamp);
             if (typeis.Boolean(args[0])) {
-                maxLength = minLength;
+                maxLength = 0;
             }
             // guid(maxLength);
             else {
@@ -147,17 +151,15 @@ exports.guid = function (timeStamp, maxLength) {
 
     maxLength = Math.max(maxLength, minLength);
 
-    if (timeStamp) {
-        if (now !== lastGuidTime) {
-            lastGuidTime = now;
-            guidIndex = 0;
-        }
+    if (now !== lastTimestamp) {
+        lastTimestamp = now;
+        safeNo = 0;
+    }
 
-        now = String(now);
-        var timeStampLength = now.length;
-        suffix = number.to62(guidIndex++);
-        suffix = string.padStart(suffix, maxLength - timeStampLength, '0');
-        ret = now + suffix;
+    if (timeStamp) {
+        ret = String(now);
+        suffix = number.to62(safeNo);
+        ret += padStartWithZero(suffix, maxLength - ret.length);
     } else {
         // 4
         var Y = padStartWithZero(d.getFullYear(), 4);
@@ -171,10 +173,10 @@ exports.guid = function (timeStamp, maxLength) {
         var I = padStartWithZero(d.getMinutes());
         // 2
         var S = padStartWithZero(d.getSeconds());
-        //// 3
-        //var C = string.padStart(d.getMilliseconds(), 3, '0');
+        // 3
+        var C = padStartWithZero(d.getMilliseconds(), 3, '0');
         //// 9
-        //var N = string.padStart(process.hrtime()[1], 9, '0');
+        //var N = padStartWithZero(process.hrtime()[1], 9, '0');
 
         a.push(Y);
         a.push(M);
@@ -182,19 +184,13 @@ exports.guid = function (timeStamp, maxLength) {
         a.push(H);
         a.push(I);
         a.push(S);
+        a.push(C);
 
-        var dateTime = a.join('');
-
-        if (dateTime !== lastGuidTime) {
-            lastGuidTime = dateTime;
-            guidIndex = 0;
-        }
-
-        suffix = number.to62(guidIndex++);
-        suffix = string.padStart(suffix, maxLength - 14, '0');
-        a.push(suffix);
         ret = a.join('');
+        suffix = number.to62(safeNo);
+        ret += padStartWithZero(suffix, maxLength - ret.length);
     }
 
+    safeNo++;
     return ret;
 };
