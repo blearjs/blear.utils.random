@@ -37,7 +37,6 @@
   },
   "dependencies": {
     "blear.utils.access": "1.x",
-    "blear.utils.number": "1.x",
     "blear.utils.string": "1.x",
     "blear.utils.typeis": "1.x"
   },

@@ -107,18 +107,25 @@ describe('index.js', function () {
         var map = {};
         var findDupliate = false;
         var lastR = '';
+        var startGuid = null;
+        var endGuid = null;
 
         while (t--) {
-            var r = random.guid(20);
-            map[r] = map[r] || 0;
-            map[r]++;
+            var guid = random.guid(20);
+            startGuid = startGuid || guid;
+            map[guid] = map[guid] || 0;
+            map[guid]++;
 
-            if (map[r] > 1) {
+            if (map[guid] > 1) {
                 findDupliate = true;
-                lastR = r;
+                lastR = guid;
                 break;
             }
+
+            endGuid = guid;
         }
         expect(findDupliate).toBe(false);
+        console.log('startGuid', startGuid);
+        console.log('endGuid  ', endGuid);
     });
 });

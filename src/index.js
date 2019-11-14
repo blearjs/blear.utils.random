@@ -1,7 +1,6 @@
 'use strict';
 
 var access = require('blear.utils.access');
-var number = require('blear.utils.number');
 var string = require('blear.utils.string');
 var typeis = require('blear.utils.typeis');
 
@@ -60,7 +59,7 @@ exports.string = function (length, dictionary) {
         length = STRING_LENGTH;
     }
 
-    length = Math.max(number.parseInt(length, STRING_LENGTH), 0);
+    length = Math.max(parseInt(length, STRING_LENGTH), 0);
     dictionary = String(dictionary || 'a');
 
     if (dictionary.indexOf('a') > -1) {
@@ -158,8 +157,7 @@ exports.guid = function (timeStamp, maxLength) {
 
     if (timeStamp) {
         ret = String(now);
-        suffix = number.to62(safeNo);
-        ret += padStartWithZero(suffix, maxLength - ret.length);
+        ret += padStartWithZero(safeNo, maxLength - ret.length);
     } else {
         // 4
         var Y = padStartWithZero(d.getFullYear(), 4);
@@ -187,8 +185,7 @@ exports.guid = function (timeStamp, maxLength) {
         a.push(C);
 
         ret = a.join('');
-        suffix = number.to62(safeNo);
-        ret += padStartWithZero(suffix, maxLength - ret.length);
+        ret += padStartWithZero(safeNo, maxLength - ret.length);
     }
 
     safeNo++;
