@@ -26,7 +26,7 @@ var STRING_LENGTH = exports.STRING_LENGTH = 6;
  * random.number(1, 3);
  * // => 1 or 2 or 3
  */
-exports.number = function (min, max) {
+var randomNumber = exports.number = function (min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min);
 };
 
@@ -59,7 +59,7 @@ exports.string = function (length, dictionary) {
         length = STRING_LENGTH;
     }
 
-    length = Math.max(parseInt(length, STRING_LENGTH), 0);
+    length = Math.max(length || STRING_LENGTH, STRING_LENGTH);
     dictionary = String(dictionary || 'a');
 
     if (dictionary.indexOf('a') > -1) {
@@ -78,7 +78,7 @@ exports.string = function (length, dictionary) {
     max = pool.length - 1;
 
     while (length--) {
-        ret += pool[exports.number(0, max)];
+        ret += pool[randomNumber(0, max)];
     }
 
     return ret;
